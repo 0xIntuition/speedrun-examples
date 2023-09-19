@@ -1,58 +1,47 @@
-Speedrun-Examples: TypeScript Example
+# Speedrun-Examples: TypeScript Guide
 
+This guide covers authentication, identity creation, claim attestation, and querying identities & claims in TypeScript. By the end, you'll grasp the core functionalities and be ready for advanced examples.
 
-With this example, you will be guided through authentications, creating identities, attesting to claims, and querying identities & claims. By the end of the tutorial, you will be familiar with the core functionalities and prepared to venture into more complex examples. 
+## Prerequisites
+- **Node.js**: Ensure Node.js (v16.14.0 or newer) is installed. Update if using an older version.
 
-# Summary
-This TypeScript example navigates through various essential processes such as, from
+## Setup
+1. **Clone the Repository**:
+   ```bash
+   git clone [YOUR-FORKED-REPO-URL]
+   ```
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   # or 
+   yarn install
+   # or 
+   pnpm install
+   ```
 
-Getting Started
-Prerequisites
-Node.js: Ensure you have Node.js (version 16.14.0 or later) installed. If you're using an older version, it's time to update.
-Setup
-Clone the repository:
-sh
-Copy code
-git clone [YOUR-FORKED-REPO-URL]
-Install the dependencies:
-sh
-Copy code
-npm install
-# or
-yarn install
-# or
-pnpm install
-Environment Setup
-Setup your environment variables in a .env.local file with the structure below. Here, API_KEY is required for all API requests and PRIVATE_KEY is associated with the API key wallet, used for signing messages and enabling writes to the Ceramic Network:
-
-sh
-Copy code
-API_KEY=REPLACE_ME
-PRIVATE_KEY=REPLACE_ME
-sh
+3. **Environment Configuration**:
+   Create a `.env.local` file and set the following:
+   ```bash
+   API_KEY=YOUR_API_KEY
+   PRIVATE_KEY=YOUR_PRIVATE_KEY
+   ```
+   - `API_KEY`: Essential for all API requests.
+   - `PRIVATE_KEY`: Linked to the API key wallet, used for message signing and Ceramic Network writes.
 
 ## Usage
-Run the script to perform a series of operations, including fetching a message for DID session creation, creating identities and claims, and querying by display name and creator. Here's a brief overview of what each step does:
-```esrun speedrun.ts```
-Fetches a message to sign for DID session creation
-Signs the message and exchanges it for a DID session
-Creates an identity representing an interesting protocol
-Creates a claim using the created identity, asserting it as part of an interesting protocol
-Queries for an identity by display name
-Queries for a claim by its creator
-Additional Resources
-To delve deeper into Intuition, refer to the resources below:
+Execute the script to perform operations like DID session creation, identity and claim creation, and querying:
+```bash
+esrun speedrun.ts
+```
+Steps:
+1. Fetch and sign a message for DID session creation.
+2. Exchange the signed message for a DID session.
+3. Create an identity for a protocol.
+4. Attest a claim using the created identity.
+5. Search for an identity using its display name.
+6. Search for a claim by its creator.
 
-[Intuition Documentation](https://intuition.gitbook.io/alpha-api/): Explore the core mechanics of Intuition.
-
-[Getting Started Guide](TODO: REPLACE ME): A quick guide to using our API for creating claims, making attestations, and querying knowledge.
-
-[Contact Us](https://discord.gg/0xintuition): Reach out to the Intuition team for support and assistance.
-References
-
-Next.js Documentation - Learn about Next.js features and API.
-Next-Auth Documentation - Get to know the features and API of Next-Auth.
-WalletConnect Documentation - Understand the functionalities offered by WalletConnect.
-Alchemy Documentation - Learn about the features and API of Alchemy.
-Contributing
-We welcome contributions from the community. If you'd like to contribute, please fork the repository and submit your pull requests.
+## Resources
+- [Intuition Documentation](https://intuition.gitbook.io/alpha-api/): Dive into Intuition's core mechanics.
+- [Getting Started Guide](TODO: REPLACE ME): A concise API guide for claim creation, attestation, and querying.
+- [Contact Us](https://discord.gg/0xintuition): Connect with the Intuition team for help.
