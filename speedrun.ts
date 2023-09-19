@@ -178,7 +178,9 @@ async function main() {
     let signature = await signMessage(message as string)
     // Exchange a signed message for a DID Session string
     let session = await getSession(message as string, signature as string)
-    // Create an identity, will be used as the object
+
+
+    // Create an identity, will be used as the object in the claim
     let subject_id = await createIdentity(session as string, "<insert_interesting_protocol>", "<describe___protocol>")
     // Create a Claim using the created Identities
     // Subject: Interesting Protocol
@@ -191,6 +193,7 @@ async function main() {
     let identityByDisplayName = await queryIdentitiesByDisplayName(session as string, "Intuition", "like")
     // Query for Claims by Creator
     let claimsByCreators = await queryClaimsByCreator(session as string, "0xf37d1dd67b39fa291da3c67f5ed60fb77b1b92b7", "ilike")
+
 }
 
 main();
