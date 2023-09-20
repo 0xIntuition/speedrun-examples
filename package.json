@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "esrun speedrun.ts"
+  },
   "dependencies": {
     "@didtools/cacao": "^2.1.0",
     "dotenv": "^16.3.1",
