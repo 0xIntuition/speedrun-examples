@@ -161,29 +161,7 @@ async function queryClaimsByCreator(session: string, wallet: string, operator: s
   return data as string
 }
 
-// Querying claims created by a wallet address
-async function queryClaimsByPredicate(session: string, predicate: string, operator: string): Promise<any> {
-  const response = await fetch('http://api.intuition.cafe/query/claims', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + session,
-      'x-api-key': process.env.API_KEY as string,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      input: { 
-        with_predicate: { display_name: {"value": predicate, op: operator} } 
-      }
-    }),
-  });
-  if(!response.ok) {
-    const error = await response.json() as any
-    throw Error(error.message)
-  } 
-  const data = await response.json();
-  console.log(data);
-  return data as string
-}
+
 async function main() {
   // Authentication
   // Get Session
@@ -193,42 +171,122 @@ async function main() {
   // Exchange a signed message for a DID Session string
   let session = await getSession(message as string, signature as string)
 
-  /**
-   * Create Identities & Claims
-   * Claims are the way to make statements about something, these somethings are represented by the semantic statement {Subject}, {Predicate}, {Object}
-   * The subject refers to the entity being described in the statement (e.g., Person, Place, Thing).
-   * The predicate indicates a specific characteristic or relation of the Subject to an {Object}. In this claim, we'll be using the Identity ID with the predicate "isInteresting".
-   * The object can be any reference of your choice, such as a Protocol, Article, Person, or any other noun.
-   * 
-   * Task:
-   * 1. Replace the subject, object display_name and description with your own values.
-   * 2. Create an identity, will be used as the object in the claim {Subject}, {isInteresting}, {Object}
-   * What is something you find interesting?
-   */
-    const subject_display_name = "" // Replace me (e.g.: "Intuition", "Ethereum", "Chocolate Cake" etc.)
-    const subject_description = "" // Replace me 
-    const object_display_name = "" // Replace me (e.g.: "Protocol", "Startup", "Layer 2", "Pastry")
-    const object_description = "" // Replace me 
-  
-  // Create the subject. This resulting identity ID be used as the subject in the claim
-  // let subject_id = await createIdentity(session as string, subject_display_name, subject_description)
+//   fetch("http://api.intuition.cafe/apikey/message", {
+//     method: "GET",
+//     headers: {
+//       "x-api-key": process.env.API_KEY,
+//     },
+//   })
 
-  // // Create the object. This resulting identity ID be used as the object in the claim
-  // let object_id = await createIdentity(session as string, object_display_name, object_description)
+  const SESSION = "eyJzZXNzaW9uS2V5U2VlZCI6IlFLaUhYOHh4TkZwQ3dOdnhJb0M0c0NUNXY5OXM4QVozNGdkUjBoK0F0b3M9IiwiY2FjYW8iOnsiaCI6eyJ0IjoiZWlwNDM2MSJ9LCJwIjp7ImRvbWFpbiI6ImludHVpdGlvbi5zeXN0ZW1zIiwiaWF0IjoiMjAyMy0wOS0xOFQxMDozNTowMi44ODNaIiwiaXNzIjoiZGlkOnBraDplaXAxNTU6NDIxNjEzOjB4ZjM3RDFERDY3QjM5ZkEyOTFEQTNDNjdmNUVkNjBmYjc3YjFiOTJiNyIsImF1ZCI6ImRpZDprZXk6ejZNa3FzaXNlVGZFUmlydDljazZSTjE1UnZZaHlFZjhxTFhhZ1JDR3I5QndGYkczIiwidmVyc2lvbiI6IjEiLCJub25jZSI6InZtd2o5NnNtIiwic3RhdGVtZW50IjoiSSBhdXRob3JpemUgbXkgRElEIHRvIGJlIHVzZWQgYnkgaW50dWl0aW9uLnN5c3RlbXMiLCJyZXNvdXJjZXMiOlsiY2VyYW1pYzovLyo_bW9kZWw9a2p6bDZodmZyYnc2Y2IyOHQxNDc3cHAzdzF3MWxyb2d2aXRra3NxcmE0bWo2dGFrN3dtY2Fsd2lobGsxcnJrIiwiY2VyYW1pYzovLyo_bW9kZWw9a2p6bDZodmZyYnc2YzkxZTBlaGhnNTY2cXA2c2lpdmFqb253cWZ4d3BrNXJ6dDVpcnVnMWRxMHM0ZXU0ZWprIiwiY2VyYW1pYzovLyo_bW9kZWw9a2p6bDZodmZyYnc2YzZ3ZzBhNWFsZTQxc2N2emp3OGUzdDZnZjZ3OGo5YTE5MmVpanA3cjY4cGh1YWlzOWRlIiwiY2VyYW1pYzovLyo_bW9kZWw9a2p6bDZodmZyYnc2Yzg1bzJkOXo2ZzNqMnIxc3dwaXhsMWtqaXhzcXVsc2dlcXdjOXV6aW1oZ2RqazlobjY2Il19LCJzIjp7InQiOiJlaXAxOTEiLCJzIjoiMHgwYzYwNDcyYTc2ZTM2YmE4MThhY2EzOWMxODY5YWUyZTUxZTRmZjQ3ZDI2ZmQ0ZGNmMjcxMzY0NmFmZmNiNGJhMDA0NDIzNWRlYmM1N2QzNTA0N2NjYzQwZjAxNjRiZDkwOTcwMzQ3Mjk2MGIwMjNkMDQyNjI2OGZjZmVhZWUxNzFjIn19fQ"
+  const res = await fetch(`http://api.intuition.cafe/apikey/session/verify?session=${encodeURIComponent(SESSION)}`, {
+    method: "GET",
+    headers: {
+      "x-api-key": process.env.API_KEY,
+    },
+  })
+  console.log(await res.json())
 
-  // // Create a Claim using the created Identities {YOUR_SUBJECT}-{isInteresting}-{YOUR_OBJECT}
-  // let claim_id = await createClaim(session as string, subject_id, "3182bf90ef182429f0f5799b1679936cce5850feec6bbabc9de4936a4324de4c", object_id)
-  
-  // // Attest to a Claim
-  // // Attesting For a Claim is a way to endorse the Claim 
-  // await attestToClaim(session as string, claim_id, true)
-  
-  // Query Identities & Claims
-  // Query for identities by displayName
-  await queryIdentitiesByDisplayName(session as string, "Intuition", "like")
+  const res2 = await fetch('http://api.intuition.cafe/apikey/1221', {
+          headers: {
+          'Authorization': 'Bearer ' + SESSION,
+     }
+    })
+    console.log(await res2.json())
 
-  // Query for Claims by Creator
-  await queryClaimsByPredicate(session as string, "isInteresting", "ilike")
+    // Create Identity about an interesting Protocol
+    const res3 = await fetch('http://api.intuition.cafe/identity', {
+        method: 'POST', 
+        headers: { 
+            'Content-Type': 'application/json',
+            'x-api-key': process.env.API_KEY as string, 
+            'Authorization': 'Bearer ' + SESSION, 
+        },
+        body: JSON.stringify({ 
+            display_name: "gn", // Human-readable name
+            description: "goodevening", // Gives context to the identity
+            }), 
+        });
+    console.log(await res3.json())
+
+    const res4 = await fetch('http://api.intuition.cafe/query/identities', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': process.env.API_KEY,
+            authorization: 'Bearer ' + SESSION,
+        },
+        body: JSON.stringify({
+            "input": {
+                "display_name": { "value": "gn", op: "=" }
+            },
+        }),
+    })
+    console.log(await res4.json())
+
+    const res5 = await fetch('http://api.intuition.cafe/identity/03bb0931e0952c41637195825a7bef533321b70efa164099a404e4c785a81d77', {
+        method: 'GET', 
+        headers: { 
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.API_KEY,
+        'Authorization': 'Bearer ' + SESSION, 
+        }
+    });
+    console.log(await res5.json())
+
+    const res6 = await fetch('http://api.intuition.cafe/identity/', {
+            method: 'GET', 
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-api-key': process.env.API_KEY,
+                'Authorization': 'Bearer ' + SESSION, 
+            }
+    });
+    console.log(await res6.json())
+
+    // Create a Claim about an interesting Protocol
+ const res7 = await fetch('http://api.intuition.cafe/claim', {
+    method: 'POST', 
+    headers: { 
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.API_KEY, 
+        'Authorization': 'Bearer ' + SESSION,
+    },
+    body: JSON.stringify({ 
+        subject_id: "ac5307aad4aba3225a8d978a245870719923b1403db0630958c43448c0dd7c25", 
+        predicate_id: "ac5307aad4aba3225a8d978a245870719923b1403db0630958c43448c0dd7c25",
+        object_id: "ac5307aad4aba3225a8d978a245870719923b1403db0630958c43448c0dd7c25",
+        }), 
+    });
+    console.log(await res7.json())
+
+     // Create Identity about an interesting Protocol
+     const res8 = await fetch('http://api.intuition.cafe/identity', {
+            method: 'POST', 
+            headers: { 
+                    'Content-Type': 'application/json',
+                    'x-api-key': process.env.API_KEY, 
+                    'Authorization': 'Bearer ' + SESSION, 
+            },
+        body: JSON.stringify({ 
+            display_name: "123", // Human-readable name,
+            description: "test1", // Gives context to the identity
+            }), 
+        });
+    console.log(await res8.json())
+
+    const res9 = await fetch(`http://api.intuition.cafe/claim/revoke`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ` + SESSION,
+          'x-api-key': process.env.API_KEY,
+        },
+        body: JSON.stringify({
+          claim_id: "1",
+        }),
+      })
+    console.log(await res9.json())
 }
 
 main();
