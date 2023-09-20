@@ -211,17 +211,17 @@ async function main() {
     const object_description = "" // Replace me 
   
   // Create the subject. This resulting identity ID be used as the subject in the claim
-  // let subject_id = await createIdentity(session as string, subject_display_name, subject_description)
+  let subject_id = await createIdentity(session as string, subject_display_name, subject_description)
 
-  // // Create the object. This resulting identity ID be used as the object in the claim
-  // let object_id = await createIdentity(session as string, object_display_name, object_description)
+  // Create the object. This resulting identity ID be used as the object in the claim
+  let object_id = await createIdentity(session as string, object_display_name, object_description)
 
-  // // Create a Claim using the created Identities {YOUR_SUBJECT}-{isInteresting}-{YOUR_OBJECT}
-  // let claim_id = await createClaim(session as string, subject_id, "3182bf90ef182429f0f5799b1679936cce5850feec6bbabc9de4936a4324de4c", object_id)
+  // Create a Claim using the created Identities {YOUR_SUBJECT}-{isInteresting}-{YOUR_OBJECT}
+  let claim_id = await createClaim(session as string, subject_id, "3182bf90ef182429f0f5799b1679936cce5850feec6bbabc9de4936a4324de4c", object_id)
   
-  // // Attest to a Claim
-  // // Attesting For a Claim is a way to endorse the Claim 
-  // await attestToClaim(session as string, claim_id, true)
+  // Attest to a Claim
+  // Attesting For a Claim is a way to endorse the Claim 
+  await attestToClaim(session as string, claim_id, true)
   
   // Query Identities & Claims
   // Query for identities by displayName
