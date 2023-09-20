@@ -6,12 +6,12 @@ This guide covers authentication, identity creation, claim attestation, and quer
 - **Node.js**: Ensure Node.js (v16.14.0 or newer) is installed. Update if using an older version.
 
 ## Setup
-1. **Fork the Repository**
-2. **Clone the Repository**:
+1. **Clone the Repository**:
    ```bash
-   git clone [YOUR-FORKED-REPO-URL]
+   git clone git@github.com:0xIntuition/speedrun-examples.git
    ```
-3. **Install Dependencies**:
+
+2. **Install Dependencies**:
    ```bash
    npm install
    # or 
@@ -24,10 +24,12 @@ This guide covers authentication, identity creation, claim attestation, and quer
    Create a `.env` file and set the following:
    ```bash
    API_KEY=YOUR_API_KEY
-   PRIVATE_KEY=YOUR_PRIVATE_KEY
+   PRIVATE_KEY=0xYOUR_PRIVATE_KEY
    ```
    - `API_KEY`: Essential for all API requests.
-   - `PRIVATE_KEY`: Linked to the API key wallet, used for message signing and Ceramic Network writes.
+   - `PRIVATE_KEY`: Linked to the API key wallet, used for message signing and Ceramic Network writes. Append 0x to the start of your private key.
+
+   **Note: This is a private key, not a seed phrase.**
 
 ## Usage
 
@@ -48,9 +50,9 @@ Steps:
 2. Exchange the signed message for a DID session.
 3. Create identities.
 4. Create a claim with the created identities
-4. Attest to the created claim.
-5. Search for an identity.
-6. Search for a claim.
+5. Attest to the created claim.
+6. Query for identities.
+7. Query for claims by creator wallet address.
 
 ## Resources
 - [Intuition Documentation](https://intuition.gitbook.io/alpha-api/): Dive into Intuition's core mechanics.
