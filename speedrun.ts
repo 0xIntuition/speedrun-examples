@@ -185,50 +185,39 @@ async function queryClaimsByPredicate(session: string, predicate: string, operat
   return data as string
 }
 async function main() {
-  // Authentication
+  const apiKey = process.env.API_KEY
   // Get Session
-  let message = await getMessage(process.env.API_KEY as string)
-  // Sign the message enabling writes to ComposeDB
-  let signature = await signMessage(message as string)
-  // Exchange a signed message for a DID Session string
-  let session = await getSession(message as string, signature as string)
+    let message = await getMessage(process.env.API_KEY as string)
+    // Sign the message enabling writes to ComposeDB
+    let signature = await signMessage(message as string)
+    // Exchange a signed message for a DID Session string
+    let session = await getSession(message as string, signature as string)
 
-  /**
-   * Create Identities & Claims
-   * Claims are the way to make statements about something, these somethings are represented by the semantic statement {Subject}, {Predicate}, {Object}
-   * The subject refers to the entity being described in the statement (e.g., Person, Place, Thing).
-   * The predicate indicates a specific characteristic or relation of the Subject to an {Object}. In this claim, we'll be using the Identity ID with the predicate "isInteresting".
-   * The object can be any reference of your choice, such as a Protocol, Article, Person, or any other noun.
-   * 
-   * Task:
-   * 1. Replace the subject, object display_name and description with your own values.
-   * 2. Create an identity, will be used as the object in the claim {Subject}, {isInteresting}, {Object}
-   * What is something you find interesting?
-   */
-    const subject_display_name = "" // Replace me (e.g.: "Intuition", "Ethereum", "Chocolate Cake" etc.)
-    const subject_description = "" // Replace me 
-    const object_display_name = "" // Replace me (e.g.: "Protocol", "Startup", "Layer 2", "Pastry")
-    const object_description = "" // Replace me 
-  
-  // Create the subject. This resulting identity ID be used as the subject in the claim
-  let subject_id = await createIdentity(session as string, subject_display_name, subject_description)
-
-  // Create the object. This resulting identity ID be used as the object in the claim
-  let object_id = await createIdentity(session as string, object_display_name, object_description)
-
-  // Create a Claim using the created Identities {YOUR_SUBJECT}-{isInteresting}-{YOUR_OBJECT}
-  let claim_id = await createClaim(session as string, subject_id, "3182bf90ef182429f0f5799b1679936cce5850feec6bbabc9de4936a4324de4c", object_id)
-  
-  // Attest to a Claim
-  // Attesting For a Claim is a way to endorse the Claim 
-  await attestToClaim(session as string, claim_id, true)
-  
-  // Query Identities & Claims
-  // Query for identities by displayName
-  await queryIdentitiesByDisplayName(session as string, "Intuition", "like")
-
-  // Query for Claims by Creator
-  await queryClaimsByPredicate(session as string, "isInteresting", "ilike")
+    //////////// Create a Identities & Claim ////////////////////////
+    // Claims are the way to make statements about something, these somethings are represented by the {Subject}, {Predicate}, {Object}
+    // In this Claim we'll be using the predicate "isInteresting", predicate expressive that the Subject is an Interesting {Object}
+    // The object can reference what ever you would like: Example: {Protocol, Article, Person, or any other Noun}
+    // Create an identity, will be used as the object in the claim {Subject}, {isInteresting}, {Object}
+    // What is something you find interesting?
+    let subject_id = await createIdentity(session as string, "<insert_interesting_subject>", "<describe_subject>")
+    // Create an Identity, will be used as the object in the claim {Subject}, {isInteresting}, {Object}
+    // What type of object is the Subject (Person, Place, Thing)
+    let object_id = await createIdentity(session as string, "<insert_object>", "<describe_object_type>")
+    // Create a Claim using the created Identities
+    // Subject: Interesting Subject
+    // Predicate: IsInteresting
+    // Object: Type of Interesting Subject
+    let claim_id = await createClaim(session as string, subject_id, "3182bf90ef182429f0f5799b1679936cce5850feec6bbabc9de4936a4324de4c", object_id)
+    //////////// Attest For a Claim ////////////////////////
+    //Attesting For a Claim is a way to endorse the Claim 
+    await attestToClaim(session as string, claim_id, true)
+    //////////// Query Identities & Claims ////////////////////////
+    // Query for Identities by Display Name
+    let identityByDisplayName = await queryIdentitiesByDisplayName(session as string, "Intuition", "like")
+    // Query for those claims with the same predicate "isInteresting"
+    // These claims are connected by a related predicate so they are likely to be related and can give you useful information 
+    // Query for Claims by Creator
+    let claimsByCreators = await queryClaimsByCreator(session as string, "0xf37d1dd67b39fa291da3c67f5ed60fb77b1b92b7", "ilike")
 }
 
 main();
