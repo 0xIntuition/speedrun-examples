@@ -6,9 +6,9 @@ config()
 
 // Authentication
 // Gets SIWE message to sign
-async function getMessage(apiKey: string): Promise<string | null> {
+async function getMessage(apiKey: string, wallet: `0x${string}`): Promise<string | null> {
   try {
-    const response = await fetch('http://api.intuition.cafe/apikey/message', { headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey } });
+    const response = await fetch('http://api.intuition.cafe/auth/message?wallet=' + encodeURIComponent(wallet as string), { headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey } });
     const data = await response.json() as { message: string};
     console.log(data)
     return data.message;
@@ -30,8 +30,8 @@ async function signMessage(message: string) {
 }
 
 // Exchange a signed message for a DID Session
-async function getSession(msg: string, signature: string): Promise<string | null> {
-    const response = await fetch('http://api.intuition.cafe/apikey/session?message=' + encodeURIComponent(msg) + '&signature=' + encodeURIComponent(signature), {
+async function getSession(msg: string, signature: string, wallet: `0x${string}`): Promise<string | null> {
+    const response = await fetch('http://api.intuition.cafe/auth/session?message=' + encodeURIComponent(msg) + '&signature=' + encodeURIComponent(signature) + '&wallet=' + encodeURIComponent(wallet as string), {
       headers: {
         'x-api-key': process.env.API_KEY as string,
       }
@@ -163,13 +163,16 @@ async function queryClaimsByCreator(session: string, wallet: string, operator: s
 
 
 async function main() {
+  const wallet = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+  const sender = wallet.address
+
   // Authentication
   // Get Session
-  let message = await getMessage(process.env.API_KEY as string)
+  let message = await getMessage(process.env.API_KEY as string, sender)
   // Sign the message enabling writes to ComposeDB
   let signature = await signMessage(message as string)
   // Exchange a signed message for a DID Session string
-  let session = await getSession(message as string, signature as string)
+  let session = await getSession(message as string, signature as string, sender)
 
   /**
    * Create Identities & Claims
